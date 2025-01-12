@@ -2,78 +2,80 @@
 
 namespace common\models;
 
+use Exception;
 use Yii;
-use yii\base\Model;
 
-/**
- * Login form
- */
-class LoginForm extends Model
+class LoginForm extends BaseForm
 {
-    public $username;
+    public $email;
+
     public $password;
+
     public $rememberMe = true;
 
-    private $_user;
+    private $_newToken = false;
 
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            // username and password are both required
-            [['username', 'password'], 'required'],
-            // rememberMe must be a boolean value
+            [['email', 'password'], 'required'],
+            ['email', 'email', 'message' => 'invalid email'],
+            ['password', 'string', 'min' => 8],
+            ['password', 'match', 'pattern' => '/^\S*$/',],
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
         ];
     }
 
-    /**
-     * Validates the password.
-     * This method serves as the inline validation for password.
-     *
-     * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
-     */
-    public function validatePassword($attribute, $params)
+    public function authenticateUserFromRequest()
     {
-        if (!$this->hasErrors()) {
-            $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $user = User::findOne(['email' => $this->email]);
+            if ($user === null) {
+                $this->addError('email','no such user');
+                $transaction->rollBack();
+                return false;
             }
+            if (!$user->isUserPassword($this->password)) {
+                $this->addError('password', 'invalid password');
+                $transaction->rollBack();
+                return false;
+            }
+            $user->clearTokens();
+            $token = AccessToken::generateNewToken($user);
+            if (!$token->save()) {
+                $this->addError('token', 'token not created');
+                $transaction->rollBack();
+                return false;
+            }
+            $this->_newToken = $token;
+            $this->setUser($user);
+            $transaction->commit();
+        } catch (Exception $exc) {
+            $this->addError('transaction', $exc->getMessage());
+            $transaction->rollBack();
+            return false;
         }
+        return true;
     }
 
-    /**
-     * Logs in a user using the provided username and password.
-     *
-     * @return bool whether the user is logged in successfully
-     */
-    public function login()
+    public function loginFromRequest()
     {
-        if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        if (!$this->authenticateUserFromRequest()) {
+            return false;
         }
-        
-        return false;
+        if (is_null(($user = $this->getUser()))) { 
+            $this->addError('user','not authenticated');
+            return false;
+        }
+        Yii::$app->user->login($user, $this->rememberMe ? 3600 * 24 * 30 : 0);
+        return true;
     }
 
-    /**
-     * Finds user by [[username]]
-     *
-     * @return User|null
-     */
-    protected function getUser()
+    public function serializeToArray()
     {
-        if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
-        }
-
-        return $this->_user;
+        $arr = [];
+        $arr['token'] = $this->_newToken ? $this->_newToken->token : '';
+        return $arr;
     }
 }
