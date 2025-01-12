@@ -1,6 +1,6 @@
 <?php
-// <<DELETE
-namespace backend\models;
+
+namespace frontend\models;
 
 use common\models\User as CommonUser;
 
