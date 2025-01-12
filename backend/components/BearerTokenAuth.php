@@ -2,7 +2,7 @@
 
 namespace backend\components;
 
-use backend\models\AccessToken;
+use common\models\AccessToken;
 use backend\models\User;
 use Yii;
 use yii\web\Request;
