@@ -2,7 +2,6 @@
 
 namespace frontend\models;
 
-use common\models\BlogPost;
 use common\models\QueryFilterInterface;
 use yii\db\ActiveQuery;
 

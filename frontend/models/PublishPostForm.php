@@ -2,8 +2,6 @@
 
 namespace frontend\models;
 
-use common\models\BlogPost;
-
 class PublishPostForm extends BaseForm
 {
     public $title;

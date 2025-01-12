@@ -4,7 +4,7 @@ namespace frontend\controllers;
 
 use ErrorException;
 use common\models\AccessToken;
-use common\models\User;
+use frontend\models\User;
 
 class BaseController extends \yii\rest\Controller
 {
