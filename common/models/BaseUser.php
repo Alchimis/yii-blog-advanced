@@ -18,8 +18,8 @@ use Yii;
  * @property string|null $verification_token
  * @property string|null $role
  *
- * @property Accesstoken[] $accesstokens
- * @property Blogpost[] $blogposts
+ * @property AccessToken[] $accessTokens
+ * @property BlogPost[] $blogPosts
  */
 class BaseUser extends \yii\db\ActiveRecord
 {
@@ -67,22 +67,22 @@ class BaseUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Accesstokens]].
+     * Gets query for [[AccessTokens]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getAccesstokens()
+    public function getAccessTokens()
     {
-        return $this->hasMany(Accesstoken::class, ['userId' => 'id']);
+        return $this->hasMany(AccessToken::class, ['userId' => 'id']);
     }
 
     /**
-     * Gets query for [[Blogposts]].
+     * Gets query for [[BlogPosts]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getBlogposts()
+    public function getBlogPosts()
     {
-        return $this->hasMany(Blogpost::class, ['authorId' => 'id']);
+        return $this->hasMany(BlogPost::class, ['authorId' => 'id']);
     }
 }

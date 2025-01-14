@@ -11,7 +11,9 @@ use Yii;
  * @property int $authorId
  * @property string $postTitle
  * @property string $postContent
- * @property string $createdAt
+ * @property string|null $createdAt
+ *
+ * @property User $author
  */
 class BaseBlogPost extends \yii\db\ActiveRecord
 {
@@ -49,5 +51,15 @@ class BaseBlogPost extends \yii\db\ActiveRecord
             'postContent' => 'Post Content',
             'createdAt' => 'Created At',
         ];
+    }
+
+    /**
+     * Gets query for [[Author]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuthor()
+    {
+        return $this->hasOne(User::class, ['id' => 'authorId']);
     }
 }

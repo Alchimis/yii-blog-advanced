@@ -10,8 +10,10 @@ use Yii;
  * @property int $accessTokenId
  * @property int $userId
  * @property string $token
- * @property string $createdAt
+ * @property string|null $createdAt
  * @property string|null $expiredAt
+ *
+ * @property User $user
  */
 class BaseAccessToken extends \yii\db\ActiveRecord
 {
@@ -49,5 +51,15 @@ class BaseAccessToken extends \yii\db\ActiveRecord
             'createdAt' => 'Created At',
             'expiredAt' => 'Expired At',
         ];
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'userId']);
     }
 }
