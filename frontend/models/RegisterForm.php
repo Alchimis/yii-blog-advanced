@@ -5,6 +5,7 @@ namespace frontend\models;
 use Exception;
 use Yii;
 use common\models\AccessToken;
+use common\models\User;
 
 class RegisterForm extends BaseForm
 {

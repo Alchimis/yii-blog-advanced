@@ -5,6 +5,7 @@ namespace frontend\models;
 use Yii;
 use yii\base\Model;
 use yii\web\Response;
+use common\models\User;
 
 class BaseForm extends Model
 {

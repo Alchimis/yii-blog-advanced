@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use common\models\QueryFilterInterface;
+use common\models\BlogPost;
 use yii\db\ActiveQuery;
 
 class GetPostsForm extends BaseForm implements QueryFilterInterface
