@@ -28,10 +28,7 @@ class User extends BaseUser implements IdentityInterface
         if (is_null($token)){
             return null;
         }
-        $user = User::findOne([
-            'id' => $token->userId,
-        ]);
-        return $user;
+        return $token->user;
     }
 
     public static function findByVerificationToken($token)
@@ -40,10 +37,7 @@ class User extends BaseUser implements IdentityInterface
         if (is_null($token)){
             return null;
         }
-        $user = User::findOne([
-            'id' => $token->userId,
-        ]);
-        return $user;
+        return $token->user;
     }
 
     public function getAuthKey()

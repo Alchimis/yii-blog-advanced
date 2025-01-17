@@ -22,11 +22,6 @@ class AccessToken extends BaseAccessToken
         ]);
     }
 
-    public function getAttachedUser()
-    {
-        return User::findOne($this->userId);
-    }
-
     /**
      * @param User $user
      * @return AccessToken $token 
