@@ -36,7 +36,10 @@ class PublishPostForm extends BaseForm
             $this->addError('', 'not authenticated');
             return false;
         }
-        $blogPost = BlogPost::makePost($user, $this->title, $this->content);
+        $blogPost = new BlogPost();
+        $blogPost->authorId = $user->getId();
+        $blogPost->postTitle =  $this->title;
+        $blogPost->postContent = $this->content;
         if (!$blogPost->save()) {
             $this->addError('', 'blog post not saved');
             return false;

@@ -5,25 +5,6 @@ namespace common\models;
 class BlogPost extends BaseBlogPost
 {
     /**
-     * this function does not call [[save()]] on post. 
-     * 
-     * @param User $author
-     * @param string $title
-     * @param string $content
-     * 
-     * @return BlogPost
-     */
-    public static function makePost($author, $title, $content)
-    {
-        $post = new BlogPost();
-        $post->authorId = $author->getId();
-        $post->postTitle =  $title;
-        $post->postContent = $content;
-        return $post;
-    }
-
-    
-    /**
      * @param QueryFilterInterface $filter
      * 
      * @return BlogPost[]
