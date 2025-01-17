@@ -24,13 +24,7 @@ class BlogPosts
     {
         $result = [];
         foreach ($this->posts as $post) {
-            $result[] = [
-                'id' => $post->postId,
-                'authorId' => $post->authorId,
-                'title' => $post->postTitle,
-                'content' => $post->postContent,
-                'createdAt' => $post->createdAt,
-            ];
+            $result[] = $post->serializeToArray();
         }
         return $result;
     }
