@@ -19,8 +19,7 @@ class BlogPostAdminController extends BaseController
     public function behaviors()
     {
         return array_merge(
-            parent::behaviors(),
-            [
+            parent::behaviors(), [
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

@@ -11,8 +11,7 @@ class BaseController extends Controller
     public function behaviors()
     {
         return array_merge(
-            parent::behaviors(),
-            [
+            parent::behaviors(), [
                 'access' => [
                     'class' => AccessControl::class,
                     'rules' => [
@@ -30,7 +29,7 @@ class BaseController extends Controller
                             'matchCallback' => function ($rule, $action) {
                                 return Yii::$app->user->identity->isAdmin();
                             },
-                        ]
+                        ],
                     ],
                 ],
             ],
