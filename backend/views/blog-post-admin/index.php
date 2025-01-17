@@ -1,6 +1,6 @@
 <?php
 
-use backend\models\BlogPost;
+use common\models\BlogPost;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;

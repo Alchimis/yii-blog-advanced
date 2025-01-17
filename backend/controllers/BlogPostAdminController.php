@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use backend\models\BlogPost;
+use common\models\BlogPost;
 use yii\data\ActiveDataProvider;
 use backend\controllers\BaseController;
 use yii\web\NotFoundHttpException;
@@ -19,7 +19,8 @@ class BlogPostAdminController extends BaseController
     public function behaviors()
     {
         return array_merge(
-            parent::behaviors(), [
+            parent::behaviors(),
+            [
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

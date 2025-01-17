@@ -3,7 +3,7 @@
 namespace backend\components;
 
 use common\models\AccessToken;
-use backend\models\User;
+use common\models\User;
 use Yii;
 use yii\web\Request;
 use yii\filters\auth\AuthMethod;

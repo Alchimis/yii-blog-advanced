@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var backend\models\BlogPost $model */
+/** @var common\models\BlogPost $model */
 
 $this->title = 'Create Blog Post';
 $this->params['breadcrumbs'][] = ['label' => 'Blog Posts', 'url' => ['index']];
