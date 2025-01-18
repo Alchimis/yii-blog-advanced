@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\components\BearerTokenAuth;
 use Yii;
 use frontend\models\GetMyPostsForm;
 use frontend\models\GetPostsForm;
@@ -22,22 +23,26 @@ class PostController extends BaseController
     public function behaviors()
     {
         return [
+            'authenticator' => [
+                'class' => BearerTokenAuth::class,
+                'optional' => [
+                    'get-posts',
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
                     'getMyPosts' => ['GET'],
                     'getPosts' => ['GET'],
                     'publishPost' => ['POST'],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
     public function actionGetMyPosts()
     {
-        $user = $this->getUser();
         $model = new GetMyPostsForm();
-        $model->setUser($user);
         $model->load($this->request->post());
         if ($model->validate() && $model->findPosts()) {
             return $model->serializeResponse();
@@ -47,9 +52,7 @@ class PostController extends BaseController
 
     public function actionGetPosts()
     {
-        $user = $this->getUser();
         $model = new GetPostsForm();
-        $model->setUser($user);
         $model->load($this->request->post());
         if ($model->validate() && $model->findPosts()) {
             return $model->serializeResponse();
@@ -59,9 +62,7 @@ class PostController extends BaseController
 
     public function actionPublishPost()
     {
-        $user = $this->getUser();
         $model = new PublishPostForm();
-        $model->setUser($user);
         $model->load($this->request->post());
         if ($model->validate() && $model->publishPost()) {
             return $model->serializeResponse();

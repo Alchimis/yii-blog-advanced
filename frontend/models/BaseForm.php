@@ -27,6 +27,9 @@ class BaseForm extends Model
     */
     public function getUser()
     {
+        if (is_null($this->_user)) {
+            $this->_user = Yii::$app->user->getIdentity();
+        }
         return $this->_user;
     }
 

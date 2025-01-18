@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\LogoutForm;
 use Yii;
 use common\models\LoginForm;
 use common\models\ModelHelper;
@@ -51,4 +52,14 @@ class AuthenticationController extends BaseController
         throw new ErrorException(ModelHelper::getFirstError($model), 400);
     }
 
+    public function actionLogout()
+    {
+        $user = $this->getUser();
+        $model = new LogoutForm();
+        $model->setUser($user);
+        if ($model->logout()) {
+            return $model->serializeResponse();
+        }
+        throw new ErrorException(ModelHelper::getFirstError($model), 400);
+    }
 }

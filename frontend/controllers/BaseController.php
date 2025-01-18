@@ -12,11 +12,6 @@ class BaseController extends \yii\rest\Controller
 
     const BEARER_REGEXP = "/^Bearer: ([A-Za-z0-9_-]{32,})$/";
 
-    public function actionIndex()
-    {
-        return $this->render('index');
-    }
-
     public function getUser()
     {
         if ($this::useDefaultAuthentication()) {
@@ -37,7 +32,6 @@ class BaseController extends \yii\rest\Controller
         if (is_null($accessToken)) {
             throw new ErrorException('access denied', 403);
         }
-        
         $user = User::findOne(['id' => $accessToken->userId]);
         return $user;
     }

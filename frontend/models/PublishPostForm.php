@@ -52,6 +52,8 @@ class PublishPostForm extends BaseForm
 
     public function serializeToArray()
     {
-        return [ 'postId' => !$this->_postId ? -1 : $this->_postId];
+        return [ 
+            'postId' => !$this->_postId ? -1 : $this->_postId, 
+        ];
     }
 }

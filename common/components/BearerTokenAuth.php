@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\components;
+namespace common\components;
 
 use common\models\AccessToken;
 use common\models\User;
@@ -26,7 +26,7 @@ class BearerTokenAuth extends AuthMethod
         }
         $user = User::findIdentityByAccessToken($token);
         if (!is_null($user)) {
-            Yii::$app->user->login($user);
+            Yii::$app->user->setIdentity($user);
         }
         return $user;
     }
@@ -40,7 +40,7 @@ class BearerTokenAuth extends AuthMethod
         $headers = $request->getHeaders();
         $authHeader = $headers->get($this::AUTH_HEADER);
         if (is_null($authHeader)) {
-            throw new ErrorException("Header ".$this::AUTH_HEADER." not set");
+            return null;
         }
         if (is_array($authHeader)) {
             $authHeader = $authHeader[1];

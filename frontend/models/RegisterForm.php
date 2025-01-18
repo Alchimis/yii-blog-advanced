@@ -15,7 +15,10 @@ class RegisterForm extends BaseForm
 
     public $password;
 
-    public $_newToken = false;
+    /**
+     * @property AccessToken $_newToken
+    */
+    public $_newToken = null;
 
     public function rules()
     {
