@@ -4,8 +4,17 @@ namespace frontend\models;
 
 use common\models\QueryFilterInterface;
 use common\models\BlogPost;
+use common\models\BaseForm;
 use yii\db\ActiveQuery;
 
+/**
+ * @property string $dateFrom
+ * @property string $dateTo
+ * @property string $sortBy
+ * @property int $items
+ * @property int $offset
+ * @property int $authorId
+ */
 class GetPostsForm extends BaseForm implements QueryFilterInterface
 {
     public $dateFrom;
@@ -49,20 +58,16 @@ class GetPostsForm extends BaseForm implements QueryFilterInterface
     */
     public function apply(ActiveQuery $query)
     {
-        if (!empty($this->dateFrom)) 
-        {
+        if (!empty($this->dateFrom)) {
             $query->andWhere(['>=', 'createdAt', $this->dateFrom]);
         }
-        if (!empty($this->dateTo)) 
-        {
+        if (!empty($this->dateTo)) {
             $query->andWhere(['<=', 'createdAt', $this->dateTo]);
         }
-        if (!empty($this->sortBy)) 
-        {   
+        if (!empty($this->sortBy)) {   
             $query->orderBy([$this->sortBy => SORT_ASC]);
         }
-        if (!empty($this->authorId))
-        {   
+        if (!empty($this->authorId)) {   
             $query->andWhere(['=', 'authorId', $this->authorId]);
         }
         $query->offset($this->offset);

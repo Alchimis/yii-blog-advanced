@@ -5,7 +5,6 @@ namespace common\models;
 use common\models\User;
 use Yii;
 use yii\base\Model;
-use yii\web\Response;
 
 class BaseForm extends Model
 {
@@ -27,25 +26,14 @@ class BaseForm extends Model
     */
     public function getUser()
     {
+        if (empty($this->_user)) {
+            $this->_user = Yii::$app->user->getIdentity();
+        }
         return $this->_user;
     }
 
     public function serializeToArray()
     {
         return [];
-    }
-
-    /**
-     * @param Response $response
-     * @return Response
-    */
-    public function serializeResponse($response = null)
-    {
-        if (is_null($response)) {
-            $response = Yii::$app->response;
-        }
-        $response->format = Response::FORMAT_JSON;
-        $response->data = $this->serializeToArray();
-        return $response;
     }
 }

@@ -3,7 +3,12 @@
 namespace frontend\models;
 
 use common\models\BlogPost;
+use common\models\BaseForm;
 
+/**
+ * @property string $title
+ * @property string $content
+*/
 class PublishPostForm extends BaseForm
 {
     public $title;
@@ -11,16 +16,6 @@ class PublishPostForm extends BaseForm
     public $content;
 
     private $_postId = false;
-
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    public function getContent()
-    {
-        return $this->content;
-    }
 
     public function rules()
     {
@@ -35,15 +30,24 @@ class PublishPostForm extends BaseForm
     {
         $user = $this->getUser();
         if (is_null($user)) {
-            $this->addError('', 'not authenticated');
+            $this->addError('user', 'not authenticated');
             return false;
         }
-        $blogPost = new BlogPost();
-        $blogPost->authorId = $user->getId();
-        $blogPost->postTitle =  $this->title;
-        $blogPost->postContent = $this->content;
-        if (!$blogPost->save()) {
-            $this->addError('', 'blog post not saved');
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            $blogPost = new BlogPost();
+            $blogPost->authorId = $user->getId();
+            $blogPost->postTitle =  $this->title;
+            $blogPost->postContent = $this->content;
+            if (!$blogPost->save()) {
+                $transaction->rollBack();
+                $this->addError('post', 'blog post not saved');
+                return false;
+            }
+            $transaction->commit();
+        } catch (\Exception $exception) {
+            $transaction->rollBack();
+            $this->addError('transaction', 'transaction failed');
             return false;
         }
         $this->_postId = $blogPost->postId;
@@ -53,7 +57,7 @@ class PublishPostForm extends BaseForm
     public function serializeToArray()
     {
         return [ 
-            'postId' => !$this->_postId ? -1 : $this->_postId, 
+            'postId' => $this->_postId, 
         ];
     }
 }

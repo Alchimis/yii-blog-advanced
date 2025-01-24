@@ -24,9 +24,9 @@ class LogoutForm extends BaseForm
         try {
             AccessToken::clearTokens($user->id);
             $transaction->commit();
-        } catch (Exception $exc) {
+        } catch (Exception $exception) {
             $transaction->rollBack();
-            $this->addError('transaction', $exc->getMessage());
+            $this->addError('transaction', $exception->getMessage());
             return false;
         }
         $this->isLoggedOut = true;

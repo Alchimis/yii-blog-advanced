@@ -5,6 +5,11 @@ namespace common\models;
 use Exception;
 use Yii;
 
+/**
+ * @property string $email
+ * @property string $password
+ * @property bool $rememberMe
+ */
 class LoginForm extends BaseForm
 {
     public $email;
@@ -32,7 +37,7 @@ class LoginForm extends BaseForm
         try {
             $user = User::findOne(['email' => $this->email]);
             if ($user === null) {
-                $this->addError('email','no such user');
+                $this->addError('email', 'no such user');
                 $transaction->rollBack();
                 return false;
             }
@@ -51,8 +56,8 @@ class LoginForm extends BaseForm
             $this->_newToken = $token;
             $this->setUser($user);
             $transaction->commit();
-        } catch (Exception $exc) {
-            $this->addError('transaction', $exc->getMessage());
+        } catch (Exception $exception) {
+            $this->addError('transaction', $exception->getMessage());
             $transaction->rollBack();
             return false;
         }
@@ -65,7 +70,7 @@ class LoginForm extends BaseForm
             return false;
         }
         if (is_null(($user = $this->getUser()))) { 
-            $this->addError('user','not authenticated');
+            $this->addError('user', 'not authenticated');
             return false;
         }
         Yii::$app->user->login($user, $this->rememberMe ? 3600 * 24 * 30 : 0);
@@ -75,7 +80,7 @@ class LoginForm extends BaseForm
     public function serializeToArray()
     {
         $arr = [];
-        $arr['token'] = $this->_newToken ? $this->_newToken->token : '';
+        $arr['token'] = $this->_newToken ? $this->_newToken->token : null;
         return $arr;
     }
 }

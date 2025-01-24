@@ -6,7 +6,7 @@ use ErrorException;
 use common\models\AccessToken;
 use common\models\User;
 
-class BaseController extends \yii\rest\Controller
+class BaseAuthController extends BaseApiController
 {
     const AUTH_HEADER = 'X-Auth-Token';
 
@@ -14,16 +14,9 @@ class BaseController extends \yii\rest\Controller
 
     public function getUser()
     {
-        if ($this::useDefaultAuthentication()) {
-            /**
-             * @var User $user
-            */
-            $user = \Yii::$app->user->identity;
-            return $user ? $user : null;
-        }
         $token = $this->getTokenFromRequest();
         if (is_null($token)) {
-            return null;
+            throw new ErrorException('bearer token not found');
         }
         if (!AccessToken::isTokenValid($token)) {
             throw new ErrorException('invalid token');
@@ -54,10 +47,5 @@ class BaseController extends \yii\rest\Controller
         }
         $token = $matches[1];
         return $token;
-    }
-
-    public static function useDefaultAuthentication()
-    {
-        return false;
     }
 }

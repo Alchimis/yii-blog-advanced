@@ -11,33 +11,26 @@ use frontend\models\PublishPostForm;
 use ErrorException;
 use yii\filters\VerbFilter;
 
-class PostController extends BaseController
+class PostController extends BaseApiController
 {
-    public function beforeAction($action)
-    {
-        Yii::$app->request->enableCookieValidation = false;
-        Yii::$app->request->enableCsrfCookie = false;
-        return parent::beforeAction($action);
-    }
-
     public function behaviors()
     {
-        return [
-            'authenticator' => [
-                'class' => BearerTokenAuth::class,
-                'optional' => [
-                    'get-posts',
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'getMyPosts' => ['GET'],
-                    'getPosts' => ['GET'],
-                    'publishPost' => ['POST'],
-                ],
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => BearerTokenAuth::class,
+            'optional' => [
+                'get-posts',
+            ]
+        ];
+        $behaviors['verbs'] = [
+            'class' => VerbFilter::class,
+            'actions' => [
+                'getMyPosts' => ['GET'],
+                'getPosts' => ['GET'],
+                'publishPost' => ['POST'],
             ],
         ];
+        return $behaviors;
     }
 
     public function actionGetMyPosts()
@@ -45,7 +38,7 @@ class PostController extends BaseController
         $model = new GetMyPostsForm();
         $model->load($this->request->post());
         if ($model->validate() && $model->findPosts()) {
-            return $model->serializeResponse();
+            return $model->serializeToArray();
         }
         throw new ErrorException(ModelHelper::getFirstError($model));
     }
@@ -55,7 +48,7 @@ class PostController extends BaseController
         $model = new GetPostsForm();
         $model->load($this->request->post());
         if ($model->validate() && $model->findPosts()) {
-            return $model->serializeResponse();
+            return $model->serializeToArray();
         }
         throw new ErrorException(ModelHelper::getFirstError($model));
     }
@@ -65,7 +58,7 @@ class PostController extends BaseController
         $model = new PublishPostForm();
         $model->load($this->request->post());
         if ($model->validate() && $model->publishPost()) {
-            return $model->serializeResponse();
+            return $model->serializeToArray();
         }
         throw new ErrorException(ModelHelper::getFirstError($model));
     }

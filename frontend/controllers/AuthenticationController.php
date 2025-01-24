@@ -10,15 +10,8 @@ use frontend\models\RegisterForm;
 use ErrorException;
 use yii\filters\VerbFilter;
 
-class AuthenticationController extends BaseController
+class AuthenticationController extends BaseAuthController
 {
-    public function beforeAction($action)
-    {
-        Yii::$app->request->enableCookieValidation = false;
-        Yii::$app->request->enableCsrfCookie = false;
-        return parent::beforeAction($action);
-    }
-
     public function behaviors()
     {
         return [
@@ -37,7 +30,7 @@ class AuthenticationController extends BaseController
         $model = new LoginForm();
         $model->load($this->request->post());
         if ($model->validate() && $model->authenticateUserFromRequest()) {
-            return $model->serializeResponse($this->response);
+            return $model->serializeToArray();
         }
         throw new ErrorException(ModelHelper::getFirstError($model), 400);
     }
@@ -47,7 +40,7 @@ class AuthenticationController extends BaseController
         $model = new RegisterForm();
         $model->load($this->request->post());
         if ($model->validate() && $model->registerUser()) {
-            return $model->serializeResponse($this->response);
+            return $model->serializeToArray();
         }
         throw new ErrorException(ModelHelper::getFirstError($model), 400);
     }
@@ -58,7 +51,7 @@ class AuthenticationController extends BaseController
         $model = new LogoutForm();
         $model->setUser($user);
         if ($model->logout()) {
-            return $model->serializeResponse();
+            return $model->serializeToArray();
         }
         throw new ErrorException(ModelHelper::getFirstError($model), 400);
     }
