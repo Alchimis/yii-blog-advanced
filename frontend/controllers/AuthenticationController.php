@@ -28,7 +28,7 @@ class AuthenticationController extends BaseAuthController
     public function actionLogin()
     {
         $model = new LoginForm();
-        $model->load($this->request->post());
+        $model->load($this->request->post(), '');
         if ($model->validate() && $model->authenticateUserFromRequest()) {
             return $model->serializeToArray();
         }
@@ -38,7 +38,7 @@ class AuthenticationController extends BaseAuthController
     public function actionRegister()
     {
         $model = new RegisterForm();
-        $model->load($this->request->post());
+        $model->load($this->request->post(), '');
         if ($model->validate() && $model->registerUser()) {
             return $model->serializeToArray();
         }

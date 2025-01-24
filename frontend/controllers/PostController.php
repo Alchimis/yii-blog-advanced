@@ -36,7 +36,7 @@ class PostController extends BaseApiController
     public function actionGetMyPosts()
     {
         $model = new GetMyPostsForm();
-        $model->load($this->request->post());
+        $model->load($this->request->post(), '');
         if ($model->validate() && $model->findPosts()) {
             return $model->serializeToArray();
         }
@@ -46,7 +46,7 @@ class PostController extends BaseApiController
     public function actionGetPosts()
     {
         $model = new GetPostsForm();
-        $model->load($this->request->post());
+        $model->load($this->request->post(), '');
         if ($model->validate() && $model->findPosts()) {
             return $model->serializeToArray();
         }
@@ -56,7 +56,7 @@ class PostController extends BaseApiController
     public function actionPublishPost()
     {
         $model = new PublishPostForm();
-        $model->load($this->request->post());
+        $model->load($this->request->post(), '');
         if ($model->validate() && $model->publishPost()) {
             return $model->serializeToArray();
         }
