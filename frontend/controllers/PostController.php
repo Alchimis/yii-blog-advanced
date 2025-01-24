@@ -3,7 +3,6 @@
 namespace frontend\controllers;
 
 use common\components\BearerTokenAuth;
-use Yii;
 use frontend\models\GetMyPostsForm;
 use frontend\models\GetPostsForm;
 use common\models\ModelHelper;
@@ -61,10 +60,5 @@ class PostController extends BaseApiController
             return $model->serializeToArray();
         }
         throw new ErrorException(ModelHelper::getFirstError($model));
-    }
-
-    public static function useDefaultAuthentication()
-    {
-        return false;
     }
 }

@@ -3,7 +3,6 @@
 namespace frontend\controllers;
 
 use common\models\LogoutForm;
-use Yii;
 use common\models\LoginForm;
 use common\models\ModelHelper;
 use frontend\models\RegisterForm;

@@ -5,7 +5,6 @@ namespace frontend\controllers;
 use Yii;
 use yii\filters\ContentNegotiator;
 use yii\web\Response;
-use common\components\BearerTokenAuth;
 
 class BaseApiController extends \yii\rest\Controller
 {
